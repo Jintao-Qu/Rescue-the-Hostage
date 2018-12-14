@@ -30,3 +30,9 @@
 
 [ShaorongWang](http://shaorongwang.com/course/DataStructure/index.php)
 
+[Python tkinter label 更新](https://blog.csdn.net/joson1234567890/article/details/70171706)
+
+[小白学tkinter(Label（标签）组件)](https://blog.csdn.net/nkd50000/article/details/76642863)
+
+[pyhon之Tkinter学习Label](https://www.cnblogs.com/qianqiuqianye/p/8254049.html)
+
