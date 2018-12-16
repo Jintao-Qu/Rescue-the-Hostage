@@ -46,5 +46,5 @@ def load_music_button():
 
 def load_setting_button():
     root = gl.get_value("root")
-    setting_button = tk.Button(root, image=gc.get_value("settingTK"), relief=tk.FLAT, bd=0)
+    setting_button = tk.Button(root, image=gc.get_value("settingTK"), relief=tk.FLAT, bd=0, command=cmd.setting)
     setting_button.place(relx=0.94, rely=0.5)
