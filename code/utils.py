@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import global_pic as gc
+import global_var as gl
 
 def generate_arrow():
     #ARROW
@@ -46,3 +47,38 @@ def generate_arrow():
     gc.set_value("dwn_arrow1", dwn_arrow1)
     dwn_arrow1TK = ImageTk.PhotoImage(dwn_arrow1)
     gc.set_value("dwn_arrow1TK", dwn_arrow1TK)
+
+def draw_map():
+    cv = gl.get_value("cv")
+    nr = int(gl.get_value("nr"))
+    nc = int(gl.get_value("nc"))
+
+    ver_int = int((460 - nr)/(nr - 1))
+    aux = 460 - (ver_int * (nr - 1) + nr)
+    top_lef = int(aux/2 + 20)
+    btm_lef = int(aux - top_lef + 20)
+
+    lev_int = int((560 - nc)/(nc - 1))
+    aux = 560 - (lev_int * (nc - 1) + nc)
+    lef_lef = int(aux/2 + 20)
+    rig_lef = int(aux - lef_lef + 20)
+
+
+    snr = top_lef + 1
+    snc = lef_lef
+    for i in range(nr):
+        snc = lef_lef+1
+        for j in range(nc - 1):
+            cv.create_line(snc, snr, snc+lev_int, snr, fill="black", width=1)
+            snc = snc + lev_int + 1
+        snr = snr + ver_int + 1
+
+    snc = lef_lef + 1
+    snr = top_lef
+    for i in range(nc):
+        snr = top_lef + 1
+        for j in range(nr - 1):
+            cv.create_line(snc, snr, snc, snr + ver_int, fill="black", width=1)
+            snr = snr + ver_int + 1
+        snc = snc + lev_int + 1
+    cv.place(relx=0.04, rely=0.08)

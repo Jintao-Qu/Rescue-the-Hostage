@@ -58,8 +58,6 @@ def load_setting_button():
 def load_map():
     root = gl.get_value("root")
     cv = tk.Canvas(root, bg='#AFEEEE', width=600, height=500)
-    # 创建一个矩形，坐标为(10,10,110,110)
-    cv.create_rectangle(10, 10, 300, 300)
-    #cv.place(relx=0.04, rely=0.08)
-    cv.create_rectangle(10, 10, 30, 30)
+    gl.set_value("cv", cv)
+    utils.draw_map()
     cv.place(relx=0.04, rely=0.08)

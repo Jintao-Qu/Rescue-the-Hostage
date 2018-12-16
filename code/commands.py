@@ -2,8 +2,9 @@ import tkinter as tk
 import winsound
 import global_var as gl
 import pygame
+import commands as cmd
 import global_pic as gc
-
+import utils
 def music_on_off():
     cnt = gl.get_value("music_ctrl")
     gl.set_value("music_ctrl", cnt * (-1))
@@ -36,7 +37,7 @@ def setting():
     pol_sped_lable = tk.Label(top, image=gc.get_value("policeTK"), width=20, height=20)
     pol_sped_lable.place(relx=0.1, rely=0.22)
     pol_sped = tk.Spinbox(top, bd=0, from_=1, to=2, increment=1, width=6)
-    gl.set_value("pol_sped",pol_sped)
+    gl.set_value("pol_sped", pol_sped)
     pol_sped.place(relx=0.23, rely=0.24)
 
     rk_sped_lable = tk.Label(top, image=gc.get_value("rkTK"), width=20, height=20)
@@ -74,5 +75,11 @@ def setting_config():
     gl.set_value("nr", row.get())
     gl.set_value("nc", col.get())
 
+    cmd.redraw()
     top = gl.get_value("top")
     top.destroy()
+def redraw():
+    root = gl.get_value("root")
+    cv = tk.Canvas(root, bg='#AFEEEE', width=600, height=500)
+    gl.set_value("cv", cv)
+    utils.draw_map()
