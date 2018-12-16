@@ -24,7 +24,10 @@ def load_arrow():
     lef1.place(relx=0.731, rely=0.81)
     dwn1.place(relx=0.872, rely=0.81)
     rig1.place(relx=0.872, rely=0.598)
-
+def load_start_button():
+    root = gl.get_value("root")
+    start_button = tk.Button(root, image=gc.get_value("startTK"), relief=tk.FLAT, bd=0)
+    start_button.place(relx=0.72, rely=0.37)
 def load_rolelable():
     root = gl.get_value("root")
     police_lable_img = tk.Label(root, image=gc.get_value("policeTK"), width=70, height=70)
@@ -36,15 +39,27 @@ def load_rolelable():
     rk_lable = tk.Label(root, image=gc.get_value("boardTK"), text="89", font=("Helvetica", 34, "bold"), compound=tk.CENTER, height=60)
     rk_lable_img.place(relx=0.713, rely=0.21)
     rk_lable.place(relx=0.8, rely=0.2)
-
+def load_restart_button():
+    root = gl.get_value("root")
+    restart_button = tk.Button(root, image=gc.get_value("restartTK"), relief=tk.FLAT, bd=0)
+    gl.set_value("restart_button", restart_button)
+    restart_button.place(relx=0.92, rely=0.44)
 def load_music_button():
     root = gl.get_value("root")
     music_button = tk.Button(root, image=gc.get_value("voiceoffTK"), relief=tk.FLAT, bd=0, command=cmd.music_on_off)
     gl.set_value("music_ctrl", -1)
     gl.set_value("music_button", music_button)
-    music_button.place(relx=0.94, rely=0.4)
+    music_button.place(relx=0.94, rely=0.38)
 
 def load_setting_button():
     root = gl.get_value("root")
     setting_button = tk.Button(root, image=gc.get_value("settingTK"), relief=tk.FLAT, bd=0, command=cmd.setting)
     setting_button.place(relx=0.94, rely=0.5)
+def load_map():
+    root = gl.get_value("root")
+    cv = tk.Canvas(root, bg='#AFEEEE', width=600, height=500)
+    # 创建一个矩形，坐标为(10,10,110,110)
+    cv.create_rectangle(10, 10, 300, 300)
+    #cv.place(relx=0.04, rely=0.08)
+    cv.create_rectangle(10, 10, 30, 30)
+    cv.place(relx=0.04, rely=0.08)

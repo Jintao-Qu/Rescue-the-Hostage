@@ -51,6 +51,16 @@ def init_pic():
     gc.set_value("setting", setting)
     settingTK = ImageTk.PhotoImage(setting)
     gc.set_value("settingTK", settingTK)
+    #start
+    start = Image.open("img/start.png")
+    gc.set_value("start", start)
+    startTK = ImageTk.PhotoImage(start)
+    gc.set_value("startTK", startTK)
+    #restart
+    restart = Image.open("img/restart.png")
+    gc.set_value("restart", restart)
+    restartTK = ImageTk.PhotoImage(restart)
+    gc.set_value("restartTK", restartTK)
 def init_root(root):
     init_pic()
     root.geometry("1000x618")
@@ -66,10 +76,9 @@ def init_root(root):
     lw.load_rolelable()
     lw.load_music_button()
     lw.load_setting_button()
+    lw.load_start_button()
+    lw.load_restart_button()
+    lw.load_map()
 
-    cv = tk.Canvas(root, bg='#AFEEEE', width=600, height=500)
-    # 创建一个矩形，坐标为(10,10,110,110)
-    cv.create_rectangle(10, 10, 110, 110)
-    cv.place(relx=0.04, rely=0.08)
 
     root.mainloop()
