@@ -35,6 +35,7 @@ def load_rolelable():
     gl.set_value("po_cnt", po_cnt)
     police_lable_img = tk.Label(root, image=gc.get_value("policeTK"), width=70, height=70)
     police_lable = tk.Label(root, image=gc.get_value("boardTK"), font=("Helvetica", 34, "bold"), textvariable=po_cnt, compound=tk.CENTER, height=60)
+
     police_lable_img.place(relx=0.7, rely=0.07)
     police_lable.place(relx=0.8, rely=0.07)
 
@@ -47,7 +48,7 @@ def load_rolelable():
     rk_lable.place(relx=0.8, rely=0.2)
 def load_restart_button():
     root = gl.get_value("root")
-    restart_button = tk.Button(root, image=gc.get_value("restartTK"), relief=tk.FLAT, bd=0)
+    restart_button = tk.Button(root, image=gc.get_value("restartTK"), relief=tk.FLAT, bd=0, command=cmd.restart)
     gl.set_value("restart_button", restart_button)
     restart_button.place(relx=0.92, rely=0.44)
 def load_music_button():

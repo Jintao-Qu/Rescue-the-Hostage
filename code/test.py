@@ -1,3 +1,3 @@
-import random
-for i in range(100):
-    print(random.randint(1, 10))
+from tkinter import messagebox
+from tkinter import *
+messagebox.info("FishC Demo",'发射导弹？')

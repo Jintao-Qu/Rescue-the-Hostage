@@ -1,8 +1,11 @@
 import tkinter as tk
+from tkinter import messagebox
 from PIL import Image, ImageTk
 import global_pic as gc
 import global_var as gl
+import commands as cmd
 import random
+
 def generate_arrow():
     #ARROW
     arrow = gc.get_value("arrow")
@@ -169,6 +172,10 @@ def move(role, xx, yy):
             aux = index_to_xy([rkij[0] + xx, rkij[1] + yy])
             cv.coords(RK, (aux[0], aux[1]))
             gl.set_value("rkij", [rkij[0] + xx, rkij[1] + yy])
+
+        if gl.get_value("if_start") == True:
+            rk_cnt = gl.get_value("rk_cnt")
+            rk_cnt.set(int(rk_cnt.get())+1)
     elif role == 1:
         poij = gl.get_value("poij")
         PO = gl.get_value("PO")
@@ -176,6 +183,9 @@ def move(role, xx, yy):
             aux = index_to_xy([poij[0] + xx, poij[1] + yy])
             cv.coords(PO, (aux[0], aux[1]))
             gl.set_value("poij", [poij[0] + xx, poij[1] + yy])
+        if gl.get_value("if_start") == True:
+            po_cnt = gl.get_value("po_cnt")
+            po_cnt.set(int(po_cnt.get())+1)
     elif role == 2:
         lmij = gl.get_value("lmij")
         LM = gl.get_value("LM")
@@ -183,4 +193,29 @@ def move(role, xx, yy):
             aux = index_to_xy([lmij[0] + xx, lmij[1] + yy])
             cv.coords(LM, (aux[0], aux[1]))
             gl.set_value("lmij", [lmij[0] + xx, lmij[1] + yy])
+
+def loop_role():
+    sel_role = gl.get_value("sel_role")
+    if gl.get_value("is_start"):
+        sel_role += 1
+        sel_role %= 2
+        gl.set_value("sel_role", sel_role)
+        HINT = gl.get_value("HINT")
+        sel_role_button = gl.get_value("sel_role_button")
+        if sel_role == 0:
+            sel_role_button.config(image=gc.get_value("rk_sTK"))
+            HINT.set("RK移步")
+        elif sel_role == 1:
+            sel_role_button.config(image=gc.get_value("police_sTK"))
+            HINT.set("警察移步")
+def msgbox():
+    rkij = gl.get_value("rkij")
+    poij = gl.get_value("poij")
+    lmij = gl.get_value("lmij")
+    if if_catch(rkij[0], rkij[1], poij[0], poij[1]):
+        messagebox.showwarning("ohno!", "被抓住了，再试一次吧！")
+        cmd.restart()
+    elif lmij[0] == poij[0] and lmij[1] == poij[1]:
+        messagebox.showwarning("ohyeh!", "成功解救人质！")
+        cmd.restart()
 

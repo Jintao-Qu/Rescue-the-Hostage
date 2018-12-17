@@ -1,42 +1,80 @@
 import tkinter as tk
-import winsound
+import init
 import global_var as gl
 import pygame
 import commands as cmd
 import global_pic as gc
+import game
 import utils
 def up():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), -1, 0)
+    else:
+        if gl.get_value("MODE") == 2:
+            utils.move(gl.get_value("sel_role"), -1, 0)
+            utils.loop_role()
+            utils.msgbox()
+
 
 def up1():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), -1, -1)
-
+    else:
+        if gl.get_value("MODE") == 2:
+            utils.move(gl.get_value("sel_role"), -1, -1)
+            utils.loop_role()
+            utils.msgbox()
 def lef():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), 0, -1)
-
+    else:
+        if gl.get_value("MODE") == 2:
+            utils.move(gl.get_value("sel_role"), 0, -1)
+            utils.loop_role()
+            utils.msgbox()
 def lef1():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), 1, -1)
-    return
+    else:
+        if gl.get_value("MODE") == 2:
+            utils.move(gl.get_value("sel_role"), 1, -1)
+            utils.loop_role()
+            utils.msgbox()
 
 def dwn():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), 1, 0)
-
+    else:
+        if gl.get_value("MODE") == 2:
+            utils.move(gl.get_value("sel_role"), 1, 0)
+            utils.loop_role()
+            utils.msgbox()
 def dwn1():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), 1, 1)
-
+    else:
+        if gl.get_value("MODE") == 2:
+            utils.move(gl.get_value("sel_role"), 1, 1)
+            utils.loop_role()
+            utils.msgbox()
 def rig():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), 0, 1)
-
+    else:
+        if gl.get_value("MODE") == 2:
+            utils.move(gl.get_value("sel_role"), 0, 1)
+            utils.loop_role()
+            utils.msgbox()
 def rig1():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), -1, 1)
+    else:
+        if gl.get_value("MODE") == 2:
+            utils.move(gl.get_value("sel_role"), -1, 1)
+            utils.loop_role()
+            utils.msgbox()
+
+
 
 def music_on_off():
     cnt = gl.get_value("music_ctrl")
@@ -103,12 +141,13 @@ def setting_config_double():
     rk_sped = gl.get_value("rk_sped")
     row = gl.get_value("row")
     col = gl.get_value("col")
-
+    HINT = gl.get_value("HINT")
+    HINT.set("设置成功！")
     gl.set_value("sp", pol_sped.get())
     gl.set_value("sr", rk_sped.get())
     gl.set_value("nr", row.get())
     gl.set_value("nc", col.get())
-
+    gl.set_value("if_start", False)
     gl.set_value("MODE", 2)
     cmd.redraw()
     top = gl.get_value("top")
@@ -118,12 +157,13 @@ def setting_config_single():
     rk_sped = gl.get_value("rk_sped")
     row = gl.get_value("row")
     col = gl.get_value("col")
-
+    gl.set_value("if_start", False)
     gl.set_value("sp", pol_sped.get())
     gl.set_value("sr", rk_sped.get())
     gl.set_value("nr", row.get())
     gl.set_value("nc", col.get())
-
+    HINT = gl.get_value("HINT")
+    HINT.set("设置成功！")
     gl.set_value("MODE", 1)
     cmd.redraw()
     top = gl.get_value("top")
@@ -137,8 +177,14 @@ def redraw():
 def start():
     HINT = gl.get_value("HINT")
     HINT.set("游戏开始！")
+    gl.set_value("sel_role", 1)
+    sel_role_button = gl.get_value("sel_role_button")
+    sel_role_button.config(image=gc.get_value("police_sTK"))
     gl.set_value("if_start", True)
-
+    if gl.get_value("MODE") == 1:
+        game.mode1()
+    elif gl.get_value("MODE") ==2:
+        game.mode2()
 def sel_role():
     sel_role = gl.get_value("sel_role")
     sel_role = (sel_role + 1) % 3
@@ -156,6 +202,19 @@ def sel_role():
         elif sel_role == 2:
             sel_role_button.config(image=gc.get_value("lm_sTK"))
             HINT.set("设置小拉姆的位置")
+
+def restart():
+    init.init_var()
+    po_cnt = gl.get_value("po_cnt")
+    po_cnt.set("0")
+    gl.set_value("po_cnt", po_cnt)
+
+    rk_cnt = gl.get_value("rk_cnt")
+    rk_cnt.set("0")
+    gl.set_value("rk_cnt", rk_cnt)
+    HINT = gl.get_value("HINT")
+    HINT.set("重置成功！")
+    redraw()
 
 
 
