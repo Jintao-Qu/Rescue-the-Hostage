@@ -1,2 +1,3 @@
-for i in range(5):
-    print(i)
+import random
+for i in range(100):
+    print(random.randint(1, 10))

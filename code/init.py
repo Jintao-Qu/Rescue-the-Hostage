@@ -61,10 +61,30 @@ def init_pic():
     gc.set_value("restart", restart)
     restartTK = ImageTk.PhotoImage(restart)
     gc.set_value("restartTK", restartTK)
+    #small_pic
+    police_s = Image.open("img/police_s.png")
+    gc.set_value("police_s", police_s)
+    police_sTK = ImageTk.PhotoImage(police_s)
+    gc.set_value("police_sTK", police_sTK)
+
+    rk_s = Image.open("img/rk_s.png")
+    gc.set_value("rk_s", rk_s)
+    rk_sTK = ImageTk.PhotoImage(rk_s)
+    gc.set_value("rk_sTK", rk_sTK)
+
+    lm_s = Image.open("img/lm_s.png")
+    gc.set_value("lm_s", lm_s)
+    lm_sTK = ImageTk.PhotoImage(lm_s)
+    gc.set_value("lm_sTK", lm_sTK)
+    #exit_pic
+    exit = Image.open("img/exit.png")
+    gc.set_value("exit", exit)
+    exitTK = ImageTk.PhotoImage(exit)
+    gc.set_value("exitTK", exitTK)
 def init_root(root):
     init_pic()
     root.geometry("1000x618")
-    root.title(" SMC 拯救人质")
+    root.title(" SMC 拯救小拉姆")
     root.resizable(width=False, height=False)
     root.iconbitmap("img/ico.ico")
     #root['bg'] = '#'
@@ -79,8 +99,9 @@ def init_root(root):
     lw.load_setting_button()
     lw.load_start_button()
     lw.load_restart_button()
-
-
+    lw.load_jintao()
+    lw.load_hint()
+    lw.load_sel_role()
 
     #root.mainloop()
 
@@ -89,3 +110,8 @@ def init_var():
     gl.set_value("sr", 1)
     gl.set_value("nr", 5)
     gl.set_value("nc", 7)
+    gl.set_value("xx", [0, 1, 1, 1, 0, -1, -1, -1])
+    gl.set_value("yy", [1, 1, 0, -1, -1, -1, 0, 1])
+
+    gl.set_value("if_start", False)
+    gl.set_value("MODE", 2)

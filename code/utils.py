@@ -2,7 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import global_pic as gc
 import global_var as gl
-
+import random
 def generate_arrow():
     #ARROW
     arrow = gc.get_value("arrow")
@@ -54,13 +54,17 @@ def draw_map():
     nc = int(gl.get_value("nc"))
 
     ver_int = int((460 - nr)/(nr - 1))
+    gl.set_value("ver_int", ver_int)
     aux = 460 - (ver_int * (nr - 1) + nr)
     top_lef = int(aux/2 + 20)
+    gl.set_value("top_lef", top_lef)
     btm_lef = int(aux - top_lef + 20)
 
     lev_int = int((560 - nc)/(nc - 1))
+    gl.set_value("lev_int", lev_int)
     aux = 560 - (lev_int * (nc - 1) + nc)
     lef_lef = int(aux/2 + 20)
+    gl.set_value("lef_lef", lef_lef)
     rig_lef = int(aux - lef_lef + 20)
 
 
@@ -81,4 +85,102 @@ def draw_map():
             cv.create_line(snc, snr, snc, snr + ver_int, fill="black", width=1)
             snr = snr + ver_int + 1
         snc = snc + lev_int + 1
+
+    init_role_position()
     cv.place(relx=0.04, rely=0.08)
+
+def index_to_xy(p):
+    #[1, 1] to [nr, nc]
+    xi = p[0]
+    yi = p[1]
+    ver_int = gl.get_value("ver_int")
+    top_lef = gl.get_value("top_lef")
+    lev_int = gl.get_value("lev_int")
+    lef_lef = gl.get_value("lef_lef")
+    x = lef_lef + yi + lev_int*(yi - 1)
+    y = top_lef + xi + ver_int*(xi - 1)
+    return [x, y]
+
+def init_role_position():
+    cv = gl.get_value("cv")
+    nr = int(gl.get_value("nr"))
+    nc = int(gl.get_value("nc"))
+#init rk's position
+
+    rk_i = random.randint(1, nr)
+    rk_j = random.randint(1, nc)
+    while(rk_i == nr and rk_j == nc):
+        rk_i = random.randint(1, nr)
+        rk_j = random.randint(1, nc)
+    rkxy = index_to_xy([rk_i, rk_j])
+    gl.set_value("rkij", [rk_i, rk_j])
+    #print("RK position", [rk_i, rk_j])
+#init police's position
+    po_i = random.randint(1, nr)
+    po_j = random.randint(1, nc)
+
+    while(if_catch(rk_i, rk_j, po_i, po_j) or (rk_i == po_i and rk_j ==po_j) or (po_i == nc and po_j == nr)):
+        po_i = random.randint(1, nr)
+        po_j = random.randint(1, nc)
+
+    poxy = index_to_xy([po_i, po_j])
+    gl.set_value("poij", [po_i, po_j])
+    #print("PO position", [po_i, po_j])
+# init lm's position
+    lm_i = random.randint(1, nr)
+    lm_j = random.randint(1, nc)
+    while(lm_i == po_i and lm_j == po_j) or (lm_i == rk_i and lm_j == rk_j) or (lm_i == nr and lm_j == nc):
+        lm_i = random.randint(1, nr)
+        lm_j = random.randint(1, nc)
+    lmxy = index_to_xy([lm_i, lm_j])
+    gl.set_value("lmij", [lm_i, lm_j])
+    #print("LM position", [lm_i, lm_j])
+    RK = cv.create_image(rkxy[0], rkxy[1], image=gc.get_value("rk_sTK"))
+    PO = cv.create_image(poxy[0], poxy[1], image=gc.get_value("police_sTK"))
+    LM = cv.create_image(lmxy[0], lmxy[1], image=gc.get_value("lm_sTK"))
+    EX = cv.create_image(565, 465, image=gc.get_value("exitTK"))
+
+    gl.set_value("RK", RK)
+    gl.set_value("PO", PO)
+    gl.set_value("LM", LM)
+    gl.set_value("EX", EX)
+
+def if_catch(rk_i, rk_j, po_i, po_j):
+    xx = gl.get_value("xx")
+    yy = gl.get_value("yy")
+    for i in range(8):
+        if (rk_i + xx[i] == po_i) and (rk_j + yy[i] == po_j):
+            return True
+    return False
+def if_in_range(x, y):
+    if (x >= 1) and (x <= int(gl.get_value("nr"))) and (y >= 1) and (y <= int(gl.get_value("nc"))):
+        return True
+    else:
+        return False
+
+def move(role, xx, yy):
+    cv = gl.get_value("cv")
+    if role == 0:
+
+        rkij = gl.get_value("rkij")
+
+        RK = gl.get_value("RK")
+        if if_in_range(rkij[0] + xx, rkij[1] + yy) == True :
+            aux = index_to_xy([rkij[0] + xx, rkij[1] + yy])
+            cv.coords(RK, (aux[0], aux[1]))
+            gl.set_value("rkij", [rkij[0] + xx, rkij[1] + yy])
+    elif role == 1:
+        poij = gl.get_value("poij")
+        PO = gl.get_value("PO")
+        if if_in_range(poij[0] + xx, poij[1] + yy) == True:
+            aux = index_to_xy([poij[0] + xx, poij[1] + yy])
+            cv.coords(PO, (aux[0], aux[1]))
+            gl.set_value("poij", [poij[0] + xx, poij[1] + yy])
+    elif role == 2:
+        lmij = gl.get_value("lmij")
+        LM = gl.get_value("LM")
+        if if_in_range(lmij[0] + xx, lmij[1] + yy) == True:
+            aux = index_to_xy([lmij[0] + xx, lmij[1] + yy])
+            cv.coords(LM, (aux[0], aux[1]))
+            gl.set_value("lmij", [lmij[0] + xx, lmij[1] + yy])
+
