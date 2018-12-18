@@ -166,9 +166,9 @@ def move(role, xx, yy):
     if role == 0:
 
         rkij = gl.get_value("rkij")
-
+        poij = gl.get_value("poij")
         RK = gl.get_value("RK")
-        if if_in_range(rkij[0] + xx, rkij[1] + yy) == True :
+        if if_in_range(rkij[0] + xx, rkij[1] + yy) == True and if_catch(rkij[0] + xx, rkij[1] + yy, poij[0], poij[1]) == False:
             aux = index_to_xy([rkij[0] + xx, rkij[1] + yy])
             cv.coords(RK, (aux[0], aux[1]))
             gl.set_value("rkij", [rkij[0] + xx, rkij[1] + yy])
@@ -179,7 +179,8 @@ def move(role, xx, yy):
     elif role == 1:
         poij = gl.get_value("poij")
         PO = gl.get_value("PO")
-        if if_in_range(poij[0] + xx, poij[1] + yy) == True:
+        rkij = gl.get_value("rkij")
+        if if_in_range(poij[0] + xx, poij[1] + yy) == True and if_catch(rkij[0], rkij[1], poij[0] + xx, poij[1] + yy) == False:
             aux = index_to_xy([poij[0] + xx, poij[1] + yy])
             cv.coords(PO, (aux[0], aux[1]))
             gl.set_value("poij", [poij[0] + xx, poij[1] + yy])

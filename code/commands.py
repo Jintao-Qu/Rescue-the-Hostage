@@ -14,8 +14,6 @@ def up():
             utils.move(gl.get_value("sel_role"), -1, 0)
             utils.loop_role()
             utils.msgbox()
-
-
 def up1():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), -1, -1)
@@ -40,7 +38,6 @@ def lef1():
             utils.move(gl.get_value("sel_role"), 1, -1)
             utils.loop_role()
             utils.msgbox()
-
 def dwn():
     if gl.get_value("if_start") == False:
         utils.move(gl.get_value("sel_role"), 1, 0)

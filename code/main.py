@@ -2,7 +2,7 @@ import tkinter as tk
 import init
 import global_pic as gc
 import global_var as gl
-gl._init_globalar()
+gl._init_globalvar()
 gc._init_globalpic()
 root = tk.Tk()
 gl.set_value("root", root)

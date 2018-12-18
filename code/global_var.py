@@ -1,4 +1,4 @@
-def _init_globalar():
+def _init_globalvar():
     global _global_dict
     _global_dict = {}
 
