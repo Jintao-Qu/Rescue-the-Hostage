@@ -1,8 +1,11 @@
 # coding=utf-8
-
+import global_var as gl
+import utils
+import tkinter
+import time
+import lines
 import math
 from sys import maxsize
-
 
 class State(object):
 
@@ -30,15 +33,16 @@ class State(object):
 class Map(object):
 
     def __init__(self, row, col):
-        self.row = row
-        self.col = col
+        self.row = int(row)
+        self.col = int(col)
         self.map = self.init_map()
 
     def init_map(self):
         map_list = []
-        for i in range(self.row):
+        #print("self", self.row, self.col)
+        for i in range(int(self.row)):
             tmp = []
-            for j in range(self.col):
+            for j in range(int(self.col)):
                 tmp.append(State(i, j))
             map_list.append(tmp)
         return map_list
@@ -49,7 +53,16 @@ class Map(object):
             for j in range(self.col):
                 tmp += self.map[i][j].state + " "
             print(tmp)
-
+    def draw_map(self, s):
+        cv = gl.get_value("cv")
+        while s != gl.get_value("end"):
+            sxy = utils.index_to_xy([s.x+1, s.y+1])
+            spxy = utils.index_to_xy([s.parent.x+1, s.parent.y+1])
+            line = cv.create_line(sxy[0], sxy[1], spxy[0], spxy[1], fill="green", width=2)
+            lines.lines.append(line)
+            #s.set_state("s")
+            s = s.parent
+        s.set_state("e")
     def get_neighbers(self, state):
         state_list = []
         for i in [-1, 0, 1]:
@@ -68,6 +81,11 @@ class Map(object):
             if x < 0 or x >= self.row or y < 0 or y >= self.col:
                 continue
             self.map[x][y].set_state("#")
+    def erase_obstacle(self, point_list):
+        for x, y in point_list:
+            if x < 0 or x >= self.row or y < 0 or y >= self.col:
+                continue
+            self.map[x][y].set_state(".")
 
 
 class Dstar(object):
@@ -146,23 +164,60 @@ class Dstar(object):
             if start.t == "close":
                 break
         start.set_state("s")
+
         s = start
-        while s != end:
+        self.map.draw_map(start)
+
+        while s != gl.get_value("end"):
             s.set_state("s")
             s = s.parent
         s.set_state("e")
+
         self.map.print_map()
+        print("--------------------------")
+
         tmp = start
-        self.map.set_obstacle([(9, 3), (9, 4), (9, 5), (9, 6), (9, 7), (9, 8)])
-        while tmp != end:
+        #self.map.set_obstacle([(2, 1), (2, 2), (2, 3), (2, 4)])
+        #self.map.erase_obstacle([(2, 0)])
+        flag = False
+        while tmp != gl.get_value("end"):
+
             tmp.set_state("*")
+            rkij = gl.get_value("rkij")
+            self.map.erase_obstacle(utils.set_obstacle(rkij))
+            utils.rk_random_move()
+            rkij = gl.get_value("rkij")
+            poij = gl.get_value("poij")
+            #utils.msgbox()
+
+
+            self.map.set_obstacle(utils.set_obstacle(rkij))
+
+            nr = gl.get_value("nr")
+            nc = gl.get_value("nc")
+            poij = gl.get_value("poij")
+            lmij = gl.get_value("lmij")
+            rkij = gl.get_value("rkij")
             self.map.print_map()
             print("")
             if tmp.parent.state == "#":
-                self.modify(tmp)
-                continue
+                #self.modify(tmp)
+                #continue
+                m = Map(nr, nc)
+                m.set_obstacle(utils.set_obstacle(rkij))
+                #start = m.map[0][0]
+                start = m.map[tmp.x][tmp.y]
+                end = m.map[lmij[0]-1][lmij[1]-1]
+                ###############################################utils.erase_lines()
+                dstar = Dstar(m)
+                dstar.run(start, end)
+                flag = True
+                return
             tmp = tmp.parent
-        tmp.set_state("e")
+            utils.PO_move(tmp.x, tmp.y)
+
+        if flag == False:
+            tmp.set_state("e")
 
     def modify(self, state):
         self.modify_cost(state)
@@ -173,10 +228,10 @@ class Dstar(object):
 
 
 if __name__ == '__main__':
-    m = Map(20, 20)
-    m.set_obstacle([(4, 3), (4, 4), (4, 5), (4, 6), (5, 3), (6, 3), (7, 3)])
-    start = m.map[1][2]
-    end = m.map[17][11]
+    m = Map(5, 5)
+    m.set_obstacle([(2, 0), (2, 1), (2, 2), (2, 3)])
+    start = m.map[0][0]
+    end = m.map[4][4]
     dstar = Dstar(m)
     dstar.run(start, end)
-    m.print_map()
+    #m.print_map()

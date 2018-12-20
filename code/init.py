@@ -24,6 +24,11 @@ def init_pic():
     gc.set_value("police", police)
     policeTK = ImageTk.PhotoImage(police)
     gc.set_value("policeTK", policeTK)
+    #LM
+    lm = Image.open("img/lm.png")
+    gc.set_value("lm", lm)
+    lmTK = ImageTk.PhotoImage(lm)
+    gc.set_value("lmTK", lmTK)
     #RK
     rk = Image.open("img/rk.png")
     gc.set_value("rk", rk)

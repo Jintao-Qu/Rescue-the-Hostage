@@ -5,6 +5,8 @@ import global_pic as gc
 import global_var as gl
 import commands as cmd
 import random
+import lines
+import time
 
 def generate_arrow():
     #ARROW
@@ -168,25 +170,40 @@ def move(role, xx, yy):
         rkij = gl.get_value("rkij")
         poij = gl.get_value("poij")
         RK = gl.get_value("RK")
-        if if_in_range(rkij[0] + xx, rkij[1] + yy) == True and if_catch(rkij[0] + xx, rkij[1] + yy, poij[0], poij[1]) == False:
-            aux = index_to_xy([rkij[0] + xx, rkij[1] + yy])
-            cv.coords(RK, (aux[0], aux[1]))
-            gl.set_value("rkij", [rkij[0] + xx, rkij[1] + yy])
 
         if gl.get_value("if_start") == True:
-            rk_cnt = gl.get_value("rk_cnt")
-            rk_cnt.set(int(rk_cnt.get())+1)
+            #rk_cnt = gl.get_value("rk_cnt")
+            #rk_cnt.set(int(rk_cnt.get())+1)
+            if if_in_range(rkij[0] + xx, rkij[1] + yy) == True:
+                aux = index_to_xy([rkij[0] + xx, rkij[1] + yy])
+                cv.coords(RK, (aux[0], aux[1]))
+                gl.set_value("rkij", [rkij[0] + xx, rkij[1] + yy])
+        else:
+            if if_in_range(rkij[0] + xx, rkij[1] + yy) == True and if_catch(rkij[0] + xx, rkij[1] + yy, poij[0],
+                                                                            poij[1]) == False:
+                aux = index_to_xy([rkij[0] + xx, rkij[1] + yy])
+                cv.coords(RK, (aux[0], aux[1]))
+                gl.set_value("rkij", [rkij[0] + xx, rkij[1] + yy])
+
+
     elif role == 1:
         poij = gl.get_value("poij")
         PO = gl.get_value("PO")
         rkij = gl.get_value("rkij")
-        if if_in_range(poij[0] + xx, poij[1] + yy) == True and if_catch(rkij[0], rkij[1], poij[0] + xx, poij[1] + yy) == False:
-            aux = index_to_xy([poij[0] + xx, poij[1] + yy])
-            cv.coords(PO, (aux[0], aux[1]))
-            gl.set_value("poij", [poij[0] + xx, poij[1] + yy])
+
         if gl.get_value("if_start") == True:
             po_cnt = gl.get_value("po_cnt")
             po_cnt.set(int(po_cnt.get())+1)
+            if if_in_range(poij[0] + xx, poij[1] + yy) == True:
+                aux = index_to_xy([poij[0] + xx, poij[1] + yy])
+                cv.coords(PO, (aux[0], aux[1]))
+                gl.set_value("poij", [poij[0] + xx, poij[1] + yy])
+        else:
+            if if_in_range(poij[0] + xx, poij[1] + yy) == True and if_catch(rkij[0], rkij[1], poij[0] + xx,
+                                                                            poij[1] + yy) == False:
+                aux = index_to_xy([poij[0] + xx, poij[1] + yy])
+                cv.coords(PO, (aux[0], aux[1]))
+                gl.set_value("poij", [poij[0] + xx, poij[1] + yy])
     elif role == 2:
         lmij = gl.get_value("lmij")
         LM = gl.get_value("LM")
@@ -194,6 +211,10 @@ def move(role, xx, yy):
             aux = index_to_xy([lmij[0] + xx, lmij[1] + yy])
             cv.coords(LM, (aux[0], aux[1]))
             gl.set_value("lmij", [lmij[0] + xx, lmij[1] + yy])
+        if gl.get_value("if_escape") == True:
+            lm_cnt = gl.get_value("lm_cnt")
+            lm_cnt.set(int(lm_cnt.get()) + 1)
+            gl.set_value("lm_cnt", lm_cnt)
 
 def loop_role():
     sel_role = gl.get_value("sel_role")
@@ -213,10 +234,93 @@ def msgbox():
     rkij = gl.get_value("rkij")
     poij = gl.get_value("poij")
     lmij = gl.get_value("lmij")
+    cv = gl.get_value("cv")
     if if_catch(rkij[0], rkij[1], poij[0], poij[1]):
         messagebox.showwarning("ohno!", "被抓住了，再试一次吧！")
         cmd.restart()
     elif lmij[0] == poij[0] and lmij[1] == poij[1]:
-        messagebox.showwarning("ohyeh!", "成功解救人质！")
-        cmd.restart()
+        PO = gl.get_value("PO")
+        cv.delete(PO)
+        messagebox.showwarning("ohyeh!", "与人质相遇！向出口前进！")
+        gl.set_value("if_escape", True)
+def msgbox_escape():
+    if gl.get_value("if_start") == True:
+        rkij = gl.get_value("rkij")
+        lmij = gl.get_value("lmij")
+        nr = gl.get_value("nr")
+        nc = gl.get_value("nc")
+        cv = gl.get_value("cv")
+
+        if lmij[0] == int(nr) and lmij[1] == int(nc):
+            messagebox.showwarning("ohyeh!", "恭喜！成功解救人质！！")
+            cmd.restart()
+        elif lmij[0] == rkij[0] and lmij[1] == rkij[1]:
+            messagebox.showwarning("ohno!", "被追上了，再试一次吧！")
+            cmd.restart()
+def set_obstacle(rkij):
+    i = rkij[0]
+    j = rkij[1]
+    #return [(i-2, j-2), (i-2, j-1), (i-2, j), (i-2, j+1), (i-2, j+2),
+    #       (i - 1, j - 2), (i - 1, j - 1), (i - 1, j), (i - 1, j + 1), (i - 1, j + 2),
+    #       (i, j - 2), (i, j - 1), (i, j), (i, j + 1), (i, j + 2),
+    #       (i + 1, j - 2), (i + 1, j - 1), (i + 1, j), (i + 1, j + 1), (i + 1, j + 2),
+    #       (i + 2, j - 2), (i + 2, j - 1), (i + 2, j), (i + 2, j + 1), (i + 2, j + 2)]
+    return [
+
+                 (i, j)
+
+                ]
+def rk_random_move():
+    #time.sleep(0.5)
+    rkij = gl.get_value("rkij")
+    lmij = gl.get_value("lmij")
+    poij = gl.get_value("poij")
+    RK = gl.get_value("RK")
+    xx = gl.get_value("xx")
+    yy = gl.get_value("yy")
+    r = random.randint(0, 7)
+    pos = index_to_xy([rkij[0]+xx[r], rkij[1]+yy[r]])
+    print(pos)
+    if if_in_range(rkij[0]+xx[r], rkij[1]+yy[r]):
+        if(rkij[0]+xx[r]!=lmij[0] and rkij[1]+yy[r]!=lmij[1]):
+            if(rkij[0]+xx[r]!=poij[0] and rkij[1]+yy[r]!=poij[1]):
+                cv = gl.get_value("cv")
+                cv.coords(RK, pos[0], pos[1])
+                gl.set_value("rkij", [rkij[0]+xx[r], rkij[1]+yy[r]])
+
+def erase_lines():
+    cv = gl.get_value("cv")
+    for i in lines.lines:
+        cv.delete(i)
+    lines.lines = []
+
+def PO_move(i, j):
+    aux = index_to_xy([i+1, j+1])
+    cv = gl.get_value("cv")
+    PO = gl.get_value("PO")
+    po_cnt = gl.get_value("po_cnt")
+    po_cnt.set(int(po_cnt.get())+1)
+    cv.coords(PO, (aux[0], aux[1]))
+    gl.set_value("poij", [i+1, j+1])
+def order(t):
+    if t > 0:
+        return 1
+    if t < 0:
+        return -1
+    return 0
+
+def rk_follow():
+    rkij = gl.get_value("rkij")
+    poij = gl.get_value("poij")
+    lmij = gl.get_value("lmij")
+    RK = gl.get_value("RK")
+    cv = gl.get_value("cv")
+    add_row = order(lmij[0] - rkij[0])
+    add_col = order(lmij[1] - rkij[1])
+    if if_in_range(rkij[0] + add_row, rkij[1] + add_col):
+        aux = index_to_xy([rkij[0] + add_row, rkij[1] + add_col])
+        cv.coords(RK, (aux[0], aux[1]))
+        gl.set_value("rkij", [rkij[0] + add_row, rkij[1] + add_col])
+
+
 

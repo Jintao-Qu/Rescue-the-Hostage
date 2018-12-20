@@ -1,3 +1,5 @@
 from tkinter import messagebox
 from tkinter import *
-messagebox.info("FishC Demo",'发射导弹？')
+import lines
+lines.lines.append(1)
+print(lines.lines)
