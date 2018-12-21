@@ -97,10 +97,10 @@ class Dstar(object):
         self.open_list = set()
 
     def process_state(self):
-        x = self.min_state()
+        x = self.min_state() #min_index
         if x is None:
             return -1
-        k_old = self.get_kmin()
+        k_old = self.get_kmin() #min
         self.remove(x)
         if k_old < x.h:
             for y in self.map.get_neighbers(x):
@@ -207,8 +207,7 @@ class Dstar(object):
             self.map.print_map()
             print("")
             if tmp.parent.state == "#":
-                #self.modify(tmp)
-                #continue
+
                 utils.obstacle(tmp.x, tmp.y)
                 flag = True
                 return
@@ -224,14 +223,3 @@ class Dstar(object):
             k_min = self.process_state()
             if k_min >= state.h:
                 break
-
-'''
-if __name__ == '__main__':
-    m = Map(5, 5)
-    m.set_obstacle([(2, 0), (2, 1), (2, 2), (2, 3)])
-    start = m.map[0][0]
-    end = m.map[4][4]
-    dstar = Dstar(m)
-    dstar.run(start, end)
-    #m.print_map()
-'''
