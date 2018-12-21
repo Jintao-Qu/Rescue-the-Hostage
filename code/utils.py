@@ -6,6 +6,7 @@ import global_var as gl
 import commands as cmd
 import random
 import lines
+from dstar import *
 import time
 
 def generate_arrow():
@@ -258,17 +259,17 @@ def msgbox_escape():
             messagebox.showwarning("ohno!", "被追上了，再试一次吧！")
             cmd.restart()
 def set_obstacle(rkij):
-    i = rkij[0]
-    j = rkij[1]
+    i = rkij[0]-1
+    j = rkij[1]-1
     #return [(i-2, j-2), (i-2, j-1), (i-2, j), (i-2, j+1), (i-2, j+2),
     #       (i - 1, j - 2), (i - 1, j - 1), (i - 1, j), (i - 1, j + 1), (i - 1, j + 2),
     #       (i, j - 2), (i, j - 1), (i, j), (i, j + 1), (i, j + 2),
     #       (i + 1, j - 2), (i + 1, j - 1), (i + 1, j), (i + 1, j + 1), (i + 1, j + 2),
     #       (i + 2, j - 2), (i + 2, j - 1), (i + 2, j), (i + 2, j + 1), (i + 2, j + 2)]
     return [
-
-                 (i, j)
-
+        (i - 1, j - 1), (i - 1, j), (i - 1, j + 1),
+        (i, j - 1), (i, j), (i, j + 1),
+        (i + 1, j - 1), (i + 1, j), (i + 1, j + 1),
                 ]
 def rk_random_move():
     #time.sleep(0.5)
@@ -280,7 +281,10 @@ def rk_random_move():
     yy = gl.get_value("yy")
     r = random.randint(0, 7)
     pos = index_to_xy([rkij[0]+xx[r], rkij[1]+yy[r]])
-    print(pos)
+    cv = gl.get_value("cv")
+    #pos = index_to_xy([rkij[0]+1, rkij[1]+1])
+    #cv.coords(RK, pos[0], pos[1])
+
     if if_in_range(rkij[0]+xx[r], rkij[1]+yy[r]):
         if(rkij[0]+xx[r]!=lmij[0] and rkij[1]+yy[r]!=lmij[1]):
             if(rkij[0]+xx[r]!=poij[0] and rkij[1]+yy[r]!=poij[1]):
@@ -322,5 +326,24 @@ def rk_follow():
         cv.coords(RK, (aux[0], aux[1]))
         gl.set_value("rkij", [rkij[0] + add_row, rkij[1] + add_col])
 
+def obstacle(x, y):
+    gl.set_value("if_obs", True)
+    print("in utils.obs")
+    nr = gl.get_value("nr")
+    nc = gl.get_value("nc")
+    rkij = gl.get_value("rkij")
+    lmij = gl.get_value("lmij")
+    poij = gl.get_value("poij")
+    m = Map(int(nr), int(nc))
+    m.set_obstacle(utils.set_obstacle(rkij))
+    start = m.map[poij[0] - 1][poij[1] - 1]
+    end = m.map[lmij[0] - 1][lmij[1] - 1]
+    gl.set_value("end", end)
+    lines.lines = []
+    dstar = Dstar(m)
+    dstar.run(start, end)
 
+
+    #print("dstar.run...")
+    dstar.run(start, end)
 

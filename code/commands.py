@@ -238,13 +238,13 @@ def setting():
 
     hang = tk.Label(top, text="行：", bd=0)
     hang.place(relx=0.08, rely=0.61)
-    row = tk.Spinbox(top, bd=0, from_=5, to=25, increment=1, width=6)
+    row = tk.Spinbox(top, bd=0, from_=15, to=25, increment=1, width=6)
     row.place(relx=0.23, rely=0.61)
     gl.set_value("row", row)
 
     lie = tk.Label(top, text="列：", bd=0)
     lie.place(relx=0.53, rely=0.61)
-    col = tk.Spinbox(top, bd=0, from_=7, to=25, increment=1, width=6)
+    col = tk.Spinbox(top, bd=0, from_=15, to=25, increment=1, width=6)
     col.place(relx=0.68, rely=0.61)
     gl.set_value("col", col)
 
@@ -353,6 +353,8 @@ def sel_role():
 
 def restart():
     init.init_var()
+    gl.set_value("if_obs", False)
+    gl.set_value("if_moved", False)
     po_cnt = gl.get_value("po_cnt")
     po_cnt.set("0")
     gl.set_value("po_cnt", po_cnt)

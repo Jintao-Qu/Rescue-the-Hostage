@@ -113,8 +113,8 @@ def init_root(root):
 def init_var():
     gl.set_value("sp", 1)
     gl.set_value("sr", 1)
-    gl.set_value("nr", 5)
-    gl.set_value("nc", 7)
+    gl.set_value("nr", 15)
+    gl.set_value("nc", 15)
     gl.set_value("xx", [0, 1, 1, 1, 0, -1, -1, -1])
     gl.set_value("yy", [1, 1, 0, -1, -1, -1, 0, 1])
 
