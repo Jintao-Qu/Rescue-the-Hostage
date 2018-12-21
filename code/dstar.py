@@ -154,6 +154,7 @@ class Dstar(object):
         if state.t == "open":
             state.t = "close"
         self.open_list.remove(state)
+        self.open_list.remove(state)\\
 
     def modify_cost(self, x):
         if x.t == "close":
